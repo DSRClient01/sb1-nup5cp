@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://192.168.254.120:8080/share/2qMRZAEsUSgK -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="shortcut icon" href="http://192.168.254.120:8080/favicon.ico">
+    
+    <script src="./API-3xui_files/share.js.Без названия"></script>
+    
+        <link href="./API-3xui_files/normalize.min.css" rel="stylesheet">
+        <link href="./API-3xui_files/share.css" rel="stylesheet">
+    
+    
+        <link href="./API-3xui_files/ckeditor-content.css" rel="stylesheet">
+    
+    
+    
+    
+    
+    <title>API-3xui</title>
+</head>
+<body data-note-id="2qMRZAEsUSgK" data-ancestor-note-id="2qMRZAEsUSgK">
+<div id="layout">
+    <div id="main">
+        
+
+        <h1 id="title">API-3xui</h1>
+
+        
+
+        
+            <div id="content" class="type-text ck-content">
+                <p><span style="color:rgb(255,255,255);"><strong>MHSanaei</strong></span></p><p style="margin-left:0px;">The Postman collection for the MHSanaei panel (3xui) comprises a diverse array of API endpoints covering authentication, inbounds management (including listing, details retrieval, updates, deletions), client operations (retrieval, updates, deletions, traffic resets), and specialized actions like resetting traffic statistics, deleting depleted clients, exporting the database, and generating backups. This comprehensive collection aims to streamline interaction with the MHSanaei panel API, empowering users to efficiently manage inbounds, clients, and execute diverse operations within the panel.</p><h2 style="margin-left:0px;"><strong>Customization</strong></h2><p style="margin-left:0px;">please note that the examples showcased in this documentation primarily focus on the <code>vmess</code> protocol. However, it's important to highlight that you have the flexibility to customize configurations and parameters according to your requirements.</p><p style="margin-left:0px;">To understand precisely what data needs to be sent to the server, navigate to your panel using Google Chrome browser, access the "Inspect" &gt; "Network" tab, create your inbound or client, and inspect the created request for your desired action. Review the payload within to identify the necessary parameters for your specific configuration. Feel free to replace the body data in the Postman collection with your custom configuration data accordingly.</p><p style="margin-left:0px;"><img src="./API-3xui_files/image.png" width="641" height="528"></p><h3 style="margin-left:-8px;"><span style="color:rgb(255,228,126);"><strong>POST </strong></span><span style="color:rgb(255,255,255);"><strong>Login</strong></span></h3><p><span style="color:rgb(255,255,255);">http://localhost:2053/login</span></p><h2 style="margin-left:0px;"><strong>Description</strong></h2><p style="margin-left:0px;">This route is used to authenticate users and generate a session ID stored in a cookie named "session," allowing authorized access to perform various operations within the panel.</p><h2 style="margin-left:0px;"><strong>Note</strong></h2><ul><li>Retrieve the generated session ID from the cookie named "session".</li><li>Ensure the provided credentials (<code>username</code> and <code>password</code>) are correct for successful authentication.</li><li>Handle any potential errors or failure messages returned in the response.</li></ul><p><span style="color:rgb(255,255,255);"><strong>Body</strong></span>urlencoded</p><p><span style="color:rgb(255,255,255);"><strong>username</strong></span></p><p style="margin-left:0px;">admin</p><p><span style="color:rgb(255,255,255);"><strong>password</strong></span></p><p style="margin-left:0px;">admin</p><p><strong>Example Request</strong></p><p style="margin-left:2px;">Successful</p><p><strong>python</strong></p><pre><code class="language-text-plain">import requests
+
+url = "http://localhost:2053/login"
+
+payload='username=admin&amp;password=admin'
+headers = {}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)</code></pre><p>&nbsp;</p><p><strong>Example Response</strong></p><p><strong>json</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">{
+  "success": true,
+  "msg": "登录成功",
+  "obj": null
+}</code></pre><h3 style="margin-left:-8px;"><span style="color:rgb(107,221,154);"><strong>GET</strong></span><span style="color:rgb(255,255,255);"><strong>Get Inbounds</strong></span></h3><p><span style="color:rgb(255,255,255);">http://localhost:2053/panel/api/inbounds/list</span></p><h2 style="margin-left:0px;"><strong>Description</strong></h2><p style="margin-left:0px;">This route is used to retrieve a comprehensive list of all inbounds along with their associated client options and statistics.</p><h2 style="margin-left:0px;"><strong>Note</strong></h2><ul><li><p style="margin-left:0px;">Requires a valid session ID (from the login endpoint), Include the session ID stored in the cookie named "session" for authorization.</p></li><li><p style="margin-left:0px;">If no inbounds are available, the response will contain an empty array <code>[]</code>.</p></li><li><p style="margin-left:0px;">Handle any potential errors or failure messages returned in the response.</p></li></ul><p><span style="color:rgb(255,255,255);"><strong>HEADERS</strong></span></p><p><span style="color:rgb(255,255,255);"><strong>Accept</strong></span></p><p style="margin-left:0px;">application/json</p><p><strong>Example Request</strong></p><p style="margin-left:2px;">No Inbounds</p><p>View More</p><p><strong>python</strong></p><pre><code class="language-text-plain">import requests
+
+url = "http://localhost:2053/panel/api/inbounds/list"
+
+payload={}
+headers = {
+  'Accept': 'application/json'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+</code></pre><p><span style="color:rgb(166,166,166);">200 OK</span></p><p><strong>Example Response</strong></p><p>&nbsp;</p><p><strong>json</strong></p><pre><code class="language-text-plain">{
+  "success": true,
+  "msg": "",
+  "obj": []
+}</code></pre><h3 style="margin-left:-8px;"><span style="color:rgb(107,221,154);"><strong>GET</strong></span><span style="color:rgb(255,255,255);"><strong>Get Inbound</strong></span></h3><p><span style="color:rgb(255,255,255);">http://localhost:2053/panel/api/inbounds/get/{inboundId}</span></p><h2 style="margin-left:0px;"><strong>Description</strong></h2><p style="margin-left:0px;">This route is used to retrieve statistics and details for a specific inbound connection identified by <code>{inboundId}</code>. This includes information about the inbound itself, its statistics, and the clients connected to it.</p><h2 style="margin-left:0px;"><strong>Path Parameter</strong></h2><ul><li><code>{inboundId}</code>: Identifier of the specific inbound for which information is requested.</li></ul><h2 style="margin-left:0px;"><strong>Note</strong></h2><ul><li><p style="margin-left:0px;">Requires a valid session ID (from the login endpoint), Include the session ID stored in the cookie named "session" for authorization.</p></li><li><p style="margin-left:0px;">Ensure that the provided <code>{inboundId}</code> corresponds to an existing inbound within the system.</p></li><li><p style="margin-left:0px;">Handle any potential errors or failure messages returned in the response.</p></li></ul><p><span style="color:rgb(255,255,255);"><strong>HEADERS</strong></span></p><p><span style="color:rgb(255,255,255);"><strong>Accept</strong></span></p><p style="margin-left:0px;">application/json</p><p><strong>Example Request</strong></p><p style="margin-left:2px;">Successful</p><p>&nbsp;</p><p>View More</p><p><strong>python</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">import requests
+
+url = "http://localhost:2053/panel/api/inbounds/get/1"
+
+payload={}
+headers = {
+  'Accept': 'application/json'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+
+</code></pre><p><span style="color:rgb(166,166,166);">200 OK</span></p><p><strong>Example Response</strong></p><ul><li>Body</li><li>Headers (3)</li></ul><p>View More</p><p><strong>json</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">{
+  "success": true,
+  "msg": "",
+  "obj": {
+    "id": 1,
+    "up": 0,
+    "down": 0,
+    "total": 0,
+    "remark": "New inbound",
+    "enable": true,
+    "expiryTime": 0,
+    "clientStats": null,
+    "listen": "",
+    "port": 48965,
+    "protocol": "vmess",
+    "settings": "{\n  \"clients\": [\n    {\n      \"alterId\": 0,\n      \"email\": \"xn1aaiwm\",\n      \"enable\": true,\n      \"expiryTime\": 0,\n      \"id\": \"1db9f8ba-d1ad-4b0e-cea2-6edf9947dae5\",\n      \"limitIp\": 0,\n      \"subId\": \"\",\n      \"tgId\": \"\",\n      \"totalGB\": 0\n    },\n    {\n      \"alterId\": 0,\n      \"email\": \"mehdikhody\",\n      \"enable\": true,\n      \"expiryTime\": 1682864675944,\n      \"id\": \"95e4e7bb-7796-47e7-e8a7-f4055194f776\",\n      \"limitIp\": 2,\n      \"subId\": \"\",\n      \"tgId\": \"\",\n      \"totalGB\": 42949672960\n    }\n  ],\n  \"decryption\": \"none\",\n  \"fallbacks\": []\n}",
+    "streamSettings": "{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"acceptProxyProtocol\":false,\"path\":\"/\",\"headers\":{}}}",
+    "tag": "inbound-48965",
+    "sniffing": "{\"enabled\":true,\"destOverride\":[\"http\",\"tls\"]}"
+  }
+}</code></pre><h3 style="margin-left:-8px;"><span style="color:rgb(107,221,154);"><strong>GET</strong></span><span style="color:rgb(255,255,255);"><strong>Get Client</strong></span></h3><p><span style="color:rgb(255,255,255);">http://localhost:2053/panel/api/inbounds/getClientTraffics/{email}</span></p><h2 style="margin-left:0px;"><strong>Description</strong></h2><p style="margin-left:0px;">This route is used to retrieve information about a specific client based on their email. This endpoint provides details such as traffic statistics and other relevant information related to the client.</p><h2 style="margin-left:0px;"><strong>Path Parameter</strong></h2><ul><li><code>{email}</code>: Email address of the client for whom information is requested.</li></ul><h2 style="margin-left:0px;"><strong>Note</strong></h2><ul><li><p style="margin-left:0px;">Requires a valid session ID (from the login endpoint), Include the session ID stored in the cookie named "session" for authorization.</p></li><li><p style="margin-left:0px;">Ensure that the provided <code>{email}</code> corresponds to a valid client in the system to retrieve accurate information.</p></li><li><p style="margin-left:0px;">Handle any potential errors or failure messages returned in the response.</p></li></ul><p><span style="color:rgb(255,255,255);"><strong>HEADERS</strong></span></p><p><span style="color:rgb(255,255,255);"><strong>Accept</strong></span></p><p style="margin-left:0px;">application/json</p><p><strong>Example Request</strong></p><p style="margin-left:2px;">Successful</p><p>&nbsp;</p><p>View More</p><p><strong>python</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">import requests
+
+url = "http://localhost:2053/panel/api/inbounds/getClientTraffics/mehdikhody"
+
+payload={}
+headers = {
+  'Accept': 'application/json'
+}
+
+response = requests.request("GET", url, headers=headers, data=payload)
+
+print(response.text)
+</code></pre><p><span style="color:rgb(166,166,166);">200 OK</span></p><p><strong>Example Response</strong></p><ul><li>Body</li><li>Headers (3)</li></ul><p>View More</p><p><strong>json</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">{
+  "success": true,
+  "msg": "",
+  "obj": {
+    "id": 3,
+    "inboundId": 1,
+    "enable": true,
+    "email": "mehdikhody",
+    "up": 0,
+    "down": 0,
+    "expiryTime": 1682864675944,
+    "total": 42949672960
+  }
+}</code></pre><p>&nbsp;</p><h3 style="margin-left:-8px;"><span style="color:rgb(255,228,126);"><strong>POST</strong></span><span style="color:rgb(255,255,255);"><strong>Get Client IPs</strong></span></h3><p><span style="color:rgb(255,255,255);">http://localhost:2053/panel/api/inbounds/clientIps/{email}</span></p><h2 style="margin-left:0px;"><strong>Description</strong></h2><p style="margin-left:0px;">This route is used to retrieve the IP records associated with a specific client identified by their email.</p><h2 style="margin-left:0px;"><strong>Path Parameter</strong></h2><ul><li><code><strong>{email}</strong></code> : Email address of the client for whom IP records are requested.</li></ul><h2 style="margin-left:0px;"><strong>Note</strong></h2><ul><li><p style="margin-left:0px;">Requires a valid session ID (from the login endpoint), Include the session ID stored in the cookie named "session" for authorization.</p></li><li><p style="margin-left:0px;">Ensure that the provided <code>{email}</code> corresponds to a valid client in the system to retrieve accurate IP records.</p></li><li><p style="margin-left:0px;">Handle any potential errors or failure messages returned in the response.</p></li></ul><p><span style="color:rgb(255,255,255);"><strong>HEADERS</strong></span></p><p><span style="color:rgb(255,255,255);"><strong>Accept</strong></span></p><p style="margin-left:0px;">application/json</p><p><strong>Example Request</strong></p><p style="margin-left:2px;">Response</p><p>&nbsp;</p><p>View More</p><p><strong>python</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">import requests
+
+url = "http://localhost:2053/panel/api/inbounds/clientIps/mehdikhody"
+
+payload={}
+headers = {
+  'Accept': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+</code></pre><p><span style="color:rgb(166,166,166);">200 OK</span></p><p><strong>Example Response</strong></p><ul><li>Body</li><li>Headers (3)</li></ul><p><strong>json</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">{
+  "success": true,
+  "msg": "",
+  "obj": "No IP Record"
+}</code></pre><h3 style="margin-left:-8px;"><span style="color:rgb(255,228,126);"><strong>POST</strong></span><span style="color:rgb(255,255,255);"><strong>Online Clients</strong></span></h3><p><span style="color:rgb(255,255,255);">http://localhost:2053/panel/api/inbounds/onlines</span></p><p><strong>Example Request</strong></p><p style="margin-left:2px;">Online Clients</p><p>&nbsp;</p><p>View More</p><p><strong>python</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">import requests
+
+url = "http://localhost:2053/panel/api/inbounds/onlines"
+
+payload={}
+files={}
+headers = {}
+
+response = requests.request("POST", url, headers=headers, data=payload, files=files)
+
+print(response.text)</code></pre><h3 style="margin-left:-8px;"><span style="color:rgb(255,228,126);"><strong>POST</strong></span><span style="color:rgb(255,255,255);"><strong>Update Client</strong></span></h3><p><span style="color:rgb(255,255,255);">http://localhost:2053/panel/api/inbounds/updateClient/{uuid}</span></p><h2 style="margin-left:0px;"><strong>Description</strong></h2><p style="margin-left:0px;">This route is used to update an existing client identified by its UUID (<code>{uuid}</code>) within a specific inbound.</p><h2 style="margin-left:0px;"><strong>Path Parameter</strong></h2><ul><li><code>{uuid}</code> : Unique identifier (UUID) of the specific client for whom information is being updated.</li></ul><h2 style="margin-left:0px;"><strong>Note</strong></h2><ul><li><p style="margin-left:0px;">Requires a valid session ID (from the login endpoint). Include the session ID stored in the cookie named "session" for authorization.</p></li><li><p style="margin-left:0px;">Verify that the provided <code>{uuid}</code> corresponds to an existing client within the system associated with the specified inbound.</p></li><li><p style="margin-left:0px;">Format the client information in the <code>settings</code> parameter as a stringified JSON format within the request body.</p></li><li><p style="margin-left:0px;">Handle any potential errors or failure messages returned in the response.</p></li></ul><p><span style="color:rgb(255,255,255);"><strong>HEADERS</strong></span></p><p><span style="color:rgb(255,255,255);"><strong>Accept</strong></span></p><p style="margin-left:0px;">application/json</p><p><span style="color:rgb(255,255,255);"><strong>Body</strong></span>raw (json)</p><p>View More</p><p><strong>json</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">{
+    "id": 1,
+    "settings": "{\"clients\":[{\"id\":\"95e4e7bb-7796-47e7-e8a7-f4055194f776\",\"alterId\":0,\"email\":\"mehdikhody\",\"limitIp\":2,\"totalGB\":42949672960,\"expiryTime\":1682864675944,\"enable\":true,\"tgId\":\"\",\"subId\":\"\"}]}"
+}</code></pre><p><strong>Example Request</strong></p><p style="margin-left:2px;">Successful</p><p>&nbsp;</p><p>View More</p><p><strong>python</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">import requests
+
+url = "http://localhost:2053/panel/api/inbounds/updateClient/95e4e7bb-7796-47e7-e8a7-f4055194f776"
+
+payload = "{\r\n    \"id\": 1,\r\n    \"settings\": \"{\\\"clients\\\":[{\\\"id\\\":\\\"95e4e7bb-7796-47e7-e8a7-f4055194f776\\\",\\\"alterId\\\":0,\\\"email\\\":\\\"mehdikhody\\\",\\\"limitIp\\\":2,\\\"totalGB\\\":42949672960,\\\"expiryTime\\\":1682864675944,\\\"enable\\\":true,\\\"tgId\\\":\\\"\\\",\\\"subId\\\":\\\"\\\"}]}\"\r\n}"
+headers = {
+  'Accept': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+</code></pre><p><span style="color:rgb(166,166,166);">200 OK</span></p><p><strong>Example Response</strong></p><ul><li>Body</li><li>Headers (3)</li></ul><p><strong>json</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">{
+  "success": true,
+  "msg": "Client updated成功",
+  "obj": null
+}</code></pre><p>&nbsp;</p><h3 style="margin-left:-8px;"><span style="color:rgb(255,228,126);"><strong>POST</strong></span><span style="color:rgb(255,255,255);"><strong>Delete Depleted Clients</strong></span></h3><p><span style="color:rgb(255,255,255);">http://localhost:2053/panel/api/inbounds/delDepletedClients/{inboundId}</span></p><h2 style="margin-left:0px;"><strong>Description</strong></h2><p style="margin-left:0px;">This route is used to delete all depleted clients associated with a specific inbound identified by its ID (<code>{inboundId}</code>). If no <code>{inboundId}</code> is specified, depleted clients will be deleted from all inbounds.</p><h2 style="margin-left:0px;"><strong>Path Parameter</strong></h2><ul><li><code>{inboundId}</code> : Identifier of the specific inbound from which the depleted clients will be deleted. If not specified, depleted clients will be deleted from all inbounds.</li></ul><h2 style="margin-left:0px;"><strong>Note</strong></h2><ul><li><p style="margin-left:0px;">Requires a valid session ID (from the login endpoint). Include the session ID stored in the cookie named "session" for authorization.</p></li><li><p style="margin-left:0px;">If <code>{inboundId}</code> is provided, ensure it corresponds to an existing inbound within the system. If not provided, depleted clients will be deleted from all inbounds.</p></li><li><p style="margin-left:0px;">Deleting depleted clients through this endpoint permanently removes all depleted clients from the specified inbound(s).</p></li><li><p style="margin-left:0px;">Handle any potential errors or failure messages returned in the response.</p></li></ul><p><strong>Example Request</strong></p><p style="margin-left:2px;">Response</p><p>&nbsp;</p><p>View More</p><p><strong>python</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">import requests
+
+url = "http://localhost:2053/panel/api/inbounds/delDepletedClients/1"
+
+payload={}
+headers = {
+  'Accept': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+</code></pre><p><span style="color:rgb(166,166,166);">200 OK</span></p><p><strong>Example Response</strong></p><ul><li>Body</li><li>Headers (3)</li></ul><p><strong>json</strong></p><p style="margin-left:auto;">&nbsp;</p><pre><code class="language-text-plain">{
+  "success": true,
+  "msg": "All delpeted clients are deleted成功",
+  "obj": null
+}</code></pre>
+            </div>
+        
+
+        
+    </div>
+
+    
+</div>
+
+
+</body></html>
